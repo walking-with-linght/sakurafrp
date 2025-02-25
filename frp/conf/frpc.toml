@@ -1,0 +1,23 @@
+user = "this_is_user"
+serverAddr = "127.0.0.1"
+serverPort = 7000
+auth.method = "token"
+auth.token = "12345678"
+
+metadatas.var1 = "abc"
+metadatas.var2 = "123"
+
+[[proxies]]
+name = "test-tcp"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+remotePort = 6000
+
+
+[[proxies]]
+name = "test-tcp2"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 223
+remotePort = 6001

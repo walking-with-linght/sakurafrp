@@ -1,0 +1,78 @@
+user = "your_name"
+serverAddr = "0.0.0.0"
+serverPort = 7000
+log.to = "./frpc.log"
+log.level = "info"
+log.maxDays = 3
+auth.method = "token"
+auth.token = "12345678"
+
+transport.tcpMux = true
+transport.tcpMuxKeepaliveInterval = 30
+start = ["ssh", "dns"]
+
+metadatas.var1 = "abc"
+metadatas.var2 = "123"
+
+[[proxies]]
+name = "ssh"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+transport.bandwidthLimit = "1MB"
+transport.bandwidthLimitMode = "client"
+transport.useEncryption = false
+transport.useCompression = false
+remotePort = 6001
+# frps 将为同一组中的代理进行负载均衡
+loadBalancer.group = "test_group"
+# 组应该有相同的组密钥
+loadBalancer.groupKey = "123456"
+metadatas.var1 = "abc"
+metadatas.var2 = "123"
+[proxies.annotations]
+#注解
+key1 = "value1"
+"prefix/key2" = "value2"
+
+# 将您的域名解析为 [serverAddr]，因此您可以使用 http://web01.yourdomain.com 浏览 web01，使用 http://web02.yourdomain.com 浏览 web02
+[[proxies]]
+name = "web01"
+type = "http"
+localIP = "127.0.0.1"
+localPort = 80
+# HTTP 用户名和密码是 HTTP 协议的安全认证
+# 如果未设置，您可以在没有认证的情况下访问此 customDomains
+httpUser = "admin"
+httpPassword = "admin"
+# 如果 frps 的域名为 frps.com，则您可以通过 URL http://web01.frps.com 访问 [web01] 代理
+subdomain = "web01"
+customDomains = ["web01.yourdomain.com"]
+# locations 仅对 HTTP 类型有效
+locations = ["/", "/pic"]
+# 如果 HTTP 基本身份验证用户为 abc，则将请求路由到此服务
+# routeByHTTPUser = abc
+hostHeaderRewrite = "example.com"
+requestHeaders.set.x-from-where = "frp"
+responseHeaders.set.foo = "bar"
+healthCheck.type = "http"
+# frpc 将向本地 HTTP 服务发送一个 GET HTTP 请求 '/status'
+# 当 HTTP 服务返回 2xx HTTP 响应代码时，表示服务处于活动状态
+healthCheck.path = "/status"
+healthCheck.intervalSeconds = 10
+healthCheck.maxFailed = 3
+healthCheck.timeoutSeconds = 3
+# 设置健康检查的头信息
+healthCheck.httpHeaders=[
+    { name = "x-from-where", value = "frp" }
+]
+[[proxies]]
+name = "web02"
+type = "https"
+localIP = "127.0.0.1"
+localPort = 8000
+subdomain = "web02"
+customDomains = ["web02.yourdomain.com"]
+# 如果不为空，frpc 将使用代理协议将连接信息传输到您的本地服务
+# v1 或 v2 或留空
+transport.proxyProtocolVersion = "v2"

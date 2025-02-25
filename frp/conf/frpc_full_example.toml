@@ -1,0 +1,311 @@
+# 该配置文件仅供参考。请勿直接使用此配置来运行程序，因为它可能存在各种问题。
+
+# 您的代理名称将被更改为 {user}.{proxy}
+user = "your_name"
+
+# IPv6 的字面地址或主机名必须用方括号括起来，
+# 如 "[::1]:80", "[ipv6-host]:http" 或 "[ipv6-host%zone]:80"
+# 对于单个 serverAddr 字段，不需要方括号，例如 serverAddr = "::"。
+serverAddr = "0.0.0.0"
+serverPort = 7000
+
+# STUN 服务器帮助穿透 NAT 孔洞。
+# natHoleStunServer = "stun.easyvoip.com:3478"
+
+# 如果第一次登录失败是否退出程序，否则将继续重新登录到 frps
+# 默认为 true
+loginFailExit = true
+
+# 控制台或实际日志文件路径，如 ./frpc.log
+log.to = "./frpc.log"
+# 日志级别：trace, debug, info, warn, error
+log.level = "info"
+log.maxDays = 3
+# 当 log.to 是控制台时，禁用日志颜色，默认值为 false
+log.disablePrintColor = false
+
+auth.method = "token"
+# auth.additionalScopes 指定了要包含身份验证信息的附加范围。
+# 可选值是 HeartBeats, NewWorkConns。
+# auth.additionalScopes = ["HeartBeats", "NewWorkConns"]
+
+# 身份验证令牌
+auth.token = "12345678"
+
+# oidc.clientID 指定用于在 OIDC 身份验证中获取令牌的客户端 ID。
+# auth.oidc.clientID = ""
+# oidc.clientSecret 指定用于在 OIDC 身份验证中获取令牌的客户端密钥。
+# auth.oidc.clientSecret = ""
+# oidc.audience 指定 OIDC 身份验证中令牌的受众。
+# auth.oidc.audience = ""
+# oidc.scope 指定 OIDC 身份验证中令牌的权限（如果 AuthenticationMethod 为 "oidc"）。默认值为空。
+# auth.oidc.scope = ""
+# oidc.tokenEndpointURL 指定实现 OIDC 令牌端点的 URL。
+# 它将用于获取 OIDC 令牌。
+# auth.oidc.tokenEndpointURL = ""
+
+# oidc.additionalEndpointParams 指定要发送到 OIDC 令牌端点的附加参数。
+# 例如，如果您想指定 "audience" 参数，可以按如下方式设置。
+# frp 将添加 "audience=<value>" "var1=<value>" 到附加参数。
+# auth.oidc.additionalEndpointParams.audience = "https://dev.auth.com/api/v2/"
+# auth.oidc.additionalEndpointParams.var1 = "foobar"
+
+# 设置管理员地址以通过 HTTP API 控制 frpc 的操作，例如重新加载
+webServer.addr = "127.0.0.1"
+webServer.port = 7400
+webServer.user = "admin"
+webServer.password = "admin"
+# 管理员资产目录。默认情况下，这些资产与 frpc 绑定在一起。
+# webServer.assetsDir = "./static"
+
+# 在管理监听器中启用 golang pprof 处理程序。
+webServer.pprofEnable = false
+
+# 到服务器的拨号等待连接完成的最大时间。默认值为 10 秒。
+# transport.dialServerTimeout = 10
+
+# dialServerKeepalive 指定 frpc 和 frps 之间活动网络连接的保活探测间隔。
+# 如果为负，则禁用保活探测。
+# transport.dialServerKeepalive = 7200
+
+# 将提前建立连接，默认值为 0
+transport.poolCount = 5
+
+# 如果使用 TCP 流复用，默认值为 true，它必须与 frps 相同
+# transport.tcpMux = true
+
+# 指定 TCP 复用的保活间隔。
+# 仅当启用了 tcpMux 时有效。
+# transport.tcpMuxKeepaliveInterval = 30
+
+# 连接到服务器使用的通信协议
+# 目前支持 tcp, kcp, quic, websocket 和 wss，默认为 tcp
+transport.protocol = "tcp"
+
+# 设置连接服务器时客户端绑定的 IP，默认值为空。
+# 仅当 protocol = tcp 或 websocket 时才使用该值。
+transport.connectServerLocalIP = "0.0.0.0"
+
+# 如果您想通过 HTTP 代理或 socks5 代理或 NTLM 代理连接 frps，您可以在此处或全局环境变量中设置 proxyURL
+# 仅在协议为 TCP 时有效
+# transport.proxyURL = "http://user:passwd@192.168.1.128:8080"
+# transport.proxyURL = "socks5://user:passwd@192.168.1.128:1080"
+# transport.proxyURL = "ntlm://user:passwd@192.168.1.128:2080"
+# QUIC 协议选项
+# transport.quic.keepalivePeriod = 10
+# transport.quic.maxIdleTimeout = 30
+# transport.quic.maxIncomingStreams = 100000
+
+# 如果 tls.enable 为 true，frpc 将通过 TLS 连接到 frps。
+# 从 v0.50.0 版本开始，默认值已更改为 true，默认启用 TLS。
+transport.tls.enable = true
+
+# transport.tls.certFile = "client.crt"
+# transport.tls.keyFile = "client.key"
+# transport.tls.trustedCaFile = "ca.crt"
+# transport.tls.serverName = "example.com"
+
+# 如果 disableCustomTLSFirstByte 设置为 false，当启用 TLS 时，frpc 将使用第一个自定义字节与 frps 建立连接。
+# 从 v0.50.0 版本开始，默认值已更改为 true，默认禁用第一个自定义字节。
+# transport.tls.disableCustomTLSFirstByte = true
+
+# 心跳配置，不建议修改默认值。
+# heartbeatInterval 的默认值为 10，heartbeatTimeout 的默认值为 90。设置为负值可以禁用它。
+# transport.heartbeatInterval = 30
+# transport.heartbeatTimeout = 90
+
+# 指定 DNS 服务器，frpc 将使用此 DNS 服务器而不是默认的。
+# dnsServer = "8.8.8.8"
+
+# 要启动的代理名称。
+# 默认值为空，表示所有代理都将启动。
+# start = ["ssh", "dns"]
+
+# 指定 UDP 包大小，单位为字节。如果未设置，默认值为 1500。
+# 此参数应在客户端和服务器之间一致。
+# 它影响 UDP 和 SUDP 代理。
+udpPacketSize = 1500
+
+# 客户端的附加元数据。
+metadatas.var1 = "abc"
+metadatas.var2 = "123"
+
+# 为代理包含其他配置文件。
+# includes = ["./confd/*.ini"]
+
+[[proxies]]
+# 'ssh' 是唯一的代理名称
+# 如果全局 user 不为空，它将被更改为 {user}.{proxy}，如 'your_name.ssh'
+name = "ssh"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 22
+# 为此代理限制带宽，单位为 KB 和 MB
+transport.bandwidthLimit = "1MB"
+# 限制带宽的位置，可以是 'client' 或 'server'，默认值为 'client'
+transport.bandwidthLimitMode = "client"
+# 如果为 true，则代理的流量将被加密，默认值为 false
+transport.useEncryption = false
+# 如果为 true，流量将被压缩
+transport.useCompression = false
+# frps 监听的远程端口
+remotePort = 6001
+# frps 将为同一组中的代理进行负载均衡
+loadBalancer.group = "test_group"
+# 组应该有相同的组密钥
+loadBalancer.groupKey = "123456"
+# 为后端服务启用健康检查，它目前支持 'tcp' 和 'http'。
+# frpc 将连接本地服务的端口以检测其健康状态
+healthCheck.type = "tcp"
+# 健康检查连接超时时间
+healthCheck.timeoutSeconds = 3
+# 如果连续失败 3 次，代理将从 frps 中删除
+healthCheck.maxFailed = 3
+# 每 10 秒进行一次健康检查
+healthCheck.intervalSeconds = 10
+# 每个代理的附加元数据信息。这些信息将传递给服务器端插件使用。
+metadatas.var1 = "abc"
+metadatas.var2 = "123"
+# 您可以通过注解为代理添加一些额外的信息。
+# 这些注解将显示在 frps 仪表板上。
+[proxies.annotations]
+key1 = "value1"
+"prefix/key2" = "value2"
+
+[[proxies]]
+name = "ssh_random"
+type = "tcp"
+localIP = "192.168.31.100"
+localPort = 22
+# 如果 remotePort 为 0，frps 将为您分配一个随机端口
+remotePort = 0
+
+[[proxies]]
+name = "dns"
+type = "udp"
+localIP = "114.114.114.114"
+localPort = 53
+remotePort = 6002
+
+# 将您的域名解析为 [serverAddr]，因此您可以使用 http://web01.yourdomain.com 浏览 web01，使用 http://web02.yourdomain.com 浏览 web02
+[[proxies]]
+name = "web01"
+type = "http"
+localIP = "127.0.0.1"
+localPort = 80
+# HTTP 用户名和密码是 HTTP 协议的安全认证
+# 如果未设置，您可以在没有认证的情况下访问此 customDomains
+httpUser = "admin"
+httpPassword = "admin"
+# 如果 frps 的域名为 frps.com，则您可以通过 URL http://web01.frps.com 访问 [web01] 代理
+subdomain = "web01"
+customDomains = ["web01.yourdomain.com"]
+# locations 仅对 HTTP 类型有效
+locations = ["/", "/pic"]
+# 如果 HTTP 基本身份验证用户为 abc，则将请求路由到此服务
+# routeByHTTPUser = abc
+hostHeaderRewrite = "example.com"
+requestHeaders.set.x-from-where = "frp"
+responseHeaders.set.foo = "bar"
+healthCheck.type = "http"
+# frpc 将向本地 HTTP 服务发送一个 GET HTTP 请求 '/status'
+# 当 HTTP 服务返回 2xx HTTP 响应代码时，表示服务处于活动状态
+healthCheck.path = "/status"
+healthCheck.intervalSeconds = 10
+healthCheck.maxFailed = 3
+healthCheck.timeoutSeconds = 3
+# 设置健康检查的头信息
+healthCheck.httpHeaders=[
+    { name = "x-from-where", value = "frp" }
+]
+[[proxies]]
+name = "web02"
+type = "https"
+localIP = "127.0.0.1"
+localPort = 8000
+subdomain = "web02"
+customDomains = ["web02.yourdomain.com"]
+# 如果不为空，frpc 将使用代理协议将连接信息传输到您的本地服务
+# v1 或 v2 或留空
+transport.proxyProtocolVersion = "v2"
+
+[[proxies]]
+name = "tcpmuxhttpconnect"
+type = "tcpmux"
+multiplexer = "httpconnect"
+localIP = "127.0.0.1"
+localPort = 10701
+customDomains = ["tunnel1"]
+# routeByHTTPUser = "user1"
+[[proxies]]
+name = "tcpmux"
+type = "tcpmux"
+multiplexer = "httpconnect"
+localIP = "127.0.0.1"
+localPort = 10702
+customDomains = ["tunnel2"]
+
+# frpc 可能作为 SOCKS5 代理客户端
+[[proxies]]
+name = "socks5"
+type = "socks5"
+localIP = "127.0.0.1"
+localPort = 1080
+# 指定 SOCKS5 代理服务器的远程地址
+remoteIP = "192.168.1.10"
+remotePort = 1080
+# 如果需要认证，可以指定 SOCKS5 用户名和密码
+# socks5User = "username"
+# socks5Passwd = "password"
+
+# frpc 可能作为 STCP 客户端连接到 frps 提供的 STCP 服务
+# STCP 客户端配置
+[[proxies]]
+name = "stcp_client"
+type = "stcp"
+localIP = "127.0.0.1"
+localPort = 8080
+# STCP 服务器的绑定端口，frps 上配置
+serverName = "stcp_server"
+# 认证密钥，必须与 frps 的 stcp 配置中的密钥一致
+transport.authKey = "123456"
+
+# frpc 可能作为 HTTP PROXY 客户端，转发 HTTP 请求
+[[proxies]]
+name = "http_proxy"
+type = "http_proxy"
+localIP = "127.0.0.1"
+localPort = 8080
+remotePort = 8081
+customDomains = ["example.com"]
+# 使用 XTCP 连接
+[[proxies]]
+name = "xtcp_client"
+type = "xtcp"
+localIP = "127.0.0.1"
+localPort = 9000
+# frps 服务器上的 xtcp 服务名称
+serverName = "xtcp_server"
+# XTCP 认证密钥，必须与 frps 的 xtcp 配置中的密钥一致
+transport.authKey = "654321"
+
+# 自定义加密和压缩配置
+[[proxies]]
+name = "custom_xtcp_client"
+type = "xtcp"
+localIP = "127.0.0.1"
+localPort = 9001
+serverName = "custom_xtcp_server"
+# 使用自定义加密和压缩配置
+transport.useEncryption = true
+transport.useCompression = true
+# frpc 作为服务端（local）向 frps 注册 xtcp 服务
+[[proxies]]
+name = "xtcp_server"
+type = "xtcp"
+localIP = "127.0.0.1"
+localPort = 9002
+# 认证密钥，客户端必须与此密钥匹配才能连接
+transport.authKey = "654321"
+# 允许最大并发连接数
+transport.maxConns = 10
