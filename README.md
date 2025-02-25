@@ -22,6 +22,6 @@ frpapi.demo.com改成面板所在服务器域名
 
 
 
-sakura\frps-config\frps_full2.ini
+sakura\frps-config\frps_for_sakura.ini
 
 http://frp.demo.com/api/改成自己的面板api地址
