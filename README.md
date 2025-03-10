@@ -29,6 +29,10 @@ frpapi.demo.com改成面板所在服务器域名
 
 ```
 sakura\frps-config\frps_for_sakura.ini
+sakura\api\index.php
 ```
 
-http://frp.demo.com/api/改成自己的面板api地址
+http://frp.demo.com/api/ 改成自己的面板api地址
+api_token 改成自己的api_token
+
+要改的基本和原版一样，只是把api地址改成自己的
