@@ -201,7 +201,7 @@ if(isset($_GET['apitoken']) || (isset($_GET['action']) && $_GET['action'] == "ge
 								$username  = $rs['username'];
 								$domain    = $domain;
 								$subdomain = $subdomain;
-								$domainSQL = (isset($_GET['customdomains']) && !empty($_GET['customdomains'])) ? ["domain" => $domain] : ["subdomain" => $subdomain];
+								$domainSQL = (isset($_GET['customdomains']) && !empty($_GET['customdomains'])) ? ["customdomains" => $domain] : ["domain" => $subdomain];
 								$querySQL  = [
 									"username"   => $username,
 									"proxy_type" => $proxyType,

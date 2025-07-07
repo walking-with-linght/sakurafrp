@@ -103,6 +103,7 @@ class ProxyManager {
 		$local_port          = $data['local_port'] ?? "80";
 		$use_encryption      = $data['use_encryption'] ?? "false";
 		$use_compression     = $data['use_compression'] ?? "false";
+		$customdomains              = $data['customdomains'] ?? "";
 		$domain              = $data['domain'] ?? "";
 		$locations           = $data['locations'] ?? "";
 		$host_header_rewrite = $data['host_header_rewrite'] ?? "";
@@ -122,6 +123,7 @@ class ProxyManager {
 			"local_port"          => $local_port,
 			"use_encryption"      => $use_encryption,
 			"use_compression"     => $use_compression,
+			"customdomains"     => $customdomains,
 			"domain"              => $domain,
 			"locations"           => $locations,
 			"host_header_rewrite" => $host_header_rewrite,
@@ -142,7 +144,7 @@ class ProxyManager {
 		
 		$nm    = new SakuraPanel\NodeManager();
 		$um    = new SakuraPanel\UserManager();
-		$_list = Array("node", "proxy_name", "proxy_type", "local_ip", "local_port", "remote_port", "domain");
+		$_list = Array("node", "proxy_name", "proxy_type", "local_ip", "local_port", "remote_port");
 		$_type = Array("tcp", "udp", "http", "https", "xtcp", "stcp");
 		$max_proxies = Intval($um->getInfoByUser($_SESSION['user'])['proxies']);
 		
@@ -155,6 +157,15 @@ class ProxyManager {
 				return Array(false, "基础信息部分所有选项都是必填的。");
 			}
 		}
+		if ($data["proxy_type"] == "http" || $data["proxy_type"] == "https"){
+			if($data["customdomains"] == "" && $data["domain"] == "") {
+				return Array(false, "必须填写自定义域名或者内置域名");
+			}
+			if($data["customdomains"] != "" && $data["domain"] != "") {
+				return Array(false, "自定义域名或者内置域名只能填写其一");
+			}
+		}
+		
 		
 		if(!Regex::isNumber($data['node'])) {
 			return Array(false, "请求不合法，无效的节点");
@@ -207,11 +218,23 @@ class ProxyManager {
 			
 		} else {
 			
-			if(!isset($data['domain']) || $data["domain"] == "") {
-				return Array(false, "创建 HTTP 或 HTTPS 类型的隧道时必须要指定一个域名");
-			}
+			// if(!isset($data['domain']) || $data["domain"] == "") {
+			// 	return Array(false, "创建 HTTP 或 HTTPS 类型的隧道时必须要指定一个域名");
+			// }
+
+			// if(isset($data['domain']) && $data['domain'] == "") {
+			// 	return Array(false, "域名不合法");
+			// }
+			// if(isset($data['customdomains']) && $data['customdomains'] == "") {
+			// 	return Array(false, "域名不合法");
+			// }
+
 			
-			if(!$this->isDomainAvailable($data['domain'], $data['proxy_type'], $data['node'])) {
+			if(isset($data['domain']) && !$this->isDomainAvailable($data['domain'], $data['proxy_type'], $data['node'])) {
+				return Array(false, "此域名已经被其他隧道使用，同一协议（http/https）一个域名只能添加一次。");
+			}
+
+			if(isset($data['customdomains']) && !$this->isDomainAvailable($data['customdomains'], $data['proxy_type'], $data['node'])) {
 				return Array(false, "此域名已经被其他隧道使用，同一协议（http/https）一个域名只能添加一次。");
 			}
 		}
@@ -225,11 +248,11 @@ class ProxyManager {
 			}
 		}
 		
-		if(isset($data['domain']) && $data["domain"] !== "") {
-			if(!Regex::isDomain($data['domain'])) {
-				return Array(false, "域名格式错误，请输入一个有效并且真实存在的域名");
-			}
-		}
+		// if(isset($data['domain']) && $data["domain"] !== "") {
+		// 	if(!Regex::isDomain($data['domain'])) {
+		// 		return Array(false, "域名格式错误，请输入一个有效并且真实存在的域名");
+		// 	}
+		// }
 		
 		// 剩下是高级设置
 		
@@ -331,7 +354,12 @@ EOF;
 
 			if($item[3] == "http" || $item[3] == "https") {
 				// HTTP / HTTPS
-				$configuration .= "customDomains = [\"{$item[8]}\"]\n";
+				if ($item[8] != "") {
+					$configuration .= "subdomain = \"{$item[8]}\"\n";
+				}
+				if ($item[17] != "") {
+					$configuration .= "customDomains = [\"{$item[17]}\"]\n";
+				}
 				$configuration .= $item[9] == "" ? "" : "locations = \"{$item[9]}\"\n";
 				$configuration .= $item[10] == "" ? "" : "hostHeaderRewrite = \"{$item[10]}\"\n";
 				$configuration .= $item[13] == "" ? "" : "requestHeaders.set.x-from-where = \"{$item[13]}\"\n";

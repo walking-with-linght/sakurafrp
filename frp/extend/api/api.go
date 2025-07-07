@@ -147,7 +147,7 @@ func CheckProxy(apiurl string, user string, pxyConf v1.ProxyConfigurer, pMsg *ms
 	}
 	//自定义二级域名
 	if (len(pMsg.SubDomain) > 0) {
-		geturl = geturl + "&customdomains=" + string(pMsg.SubDomain[0])
+		geturl = geturl + "&subdomain=" + string(pMsg.SubDomain)
 	}
 	//远程端口 可能为空？
 	remotp := strconv.Itoa(pMsg.RemotePort)

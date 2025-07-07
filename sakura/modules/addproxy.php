@@ -129,8 +129,12 @@ if(isset($_GET['randomport'])) {
 								<p><input type="text" class="form-control" id="local_port" placeholder="80" /></p>
 							</div>
 							<div class="col-sm-6">
-								<p><b>自定义域名</b> <small class="pdesc">仅限 HTTP 和 HTTPS 类型的隧道</small></p>
-								<p><input type="text" class="form-control" id="domain" placeholder="test.example1.com,test.example2.com" /></p>
+								<p><b>自定义域名</b> <small class="pdesc">仅限 HTTP 和 HTTPS 类型的隧道，与内置域名不可同时填写</small></p>
+								<p><input type="text" class="form-control" id="customdomains" placeholder="test.yourself.com" /></p>
+							</div>
+							<div class="col-sm-6">
+								<p><b>子域名</b> <small class="pdesc">仅限 HTTP 和 HTTPS 类型的隧道，与自定义域名不可同时填写</small></p>
+								<p><input type="text" class="form-control" id="domain" placeholder="test" /></p>
 							</div>
 							<div class="col-sm-6">
 								<p><b>远程端口</b> <small class="pdesc">给访客连接时使用的外部端口 (<a href="javascript:loadPortRules();">查看规则</a>)</small></p>
@@ -239,6 +243,7 @@ function addProxy() {
 	var local_ip            = $("#local_ip").val();
 	var local_port          = $("#local_port").val();
 	var remote_port         = $("#remote_port").val();
+	var customdomains              = $("#customdomains").val();
 	var domain              = $("#domain").val();
 	var use_encryption      = $("#use_encryption").val();
 	var use_compression     = $("#use_compression").val();
@@ -267,6 +272,7 @@ function addProxy() {
 			local_ip           : local_ip,
 			local_port         : local_port,
 			remote_port        : remote_port,
+			customdomains             : customdomains,
 			domain             : domain,
 			use_encryption     : use_encryption,
 			use_compression    : use_compression,

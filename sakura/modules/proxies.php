@@ -204,12 +204,16 @@ $max_proxies = Intval($um->getInfoByUser($_SESSION['user'])['proxies']);
 								foreach($ps as $pi) {
 									$domOrPort = "";
 									$domains = $pi[8];
+									$customdomains = $pi[17];
 									if($domains != null && $domains !== '') {
 										$domOrPort = $domains;
-									} elseif(!empty($pi[11])) {
+									}elseif($customdomains != null && $customdomains !== '') {
+										$domOrPort = $customdomains;
+									}elseif(!empty($pi[11])) {
 										$domOrPort = $pi[11];
 									}
 									$nodeName = $nm->getNodeInfo($pi[16])['name'];
+									
 									$enable = $pi[14] == "0" ? "checked" : "";
 									$enable = $pi[14] == "2" || $pi[14] == "3" ? "disabled" : $enable;
 									echo "<tr>
